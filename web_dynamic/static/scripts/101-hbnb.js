@@ -68,12 +68,45 @@ $(document).ready(function () {
                 <div class="description">
                   ${place.description}
                 </div>
+                <div class="reviews">
+                  <h3>Reviews</h3>
+                  <span class="toggle-reviews">show</span>
+                  <ul class="review-list"></ul>
+                </div>
               </article>
             `;
             $('#places').append(article);
           }
-        } else {
-          console.log('Error:', data.message);
+
+          // Handle the toggle reviews button click event
+          $('.toggle-reviews').click(function () {
+            const $reviewList = $(this).siblings('.review-list');
+            const placeId = $(this).closest('article').attr('data-id');
+            if ($reviewList.is(':visible')) {
+              // If reviews are visible, hide them and change the text to "Show Reviews"
+              $reviewList.hide();
+              $(this).text('Show Reviews');
+            } else {
+              // If reviews are hidden, fetch and display them and change the text to "Hide Reviews"
+              $.ajax({
+                type: 'GET',
+                url: `http://0.0.0.0:5001/api/v1/places/${placeId}/reviews`,
+                success: function (data) {
+                  const reviews = data.reviews;
+                  $reviewList.empty();
+                  for (const review of reviews) {
+                    const $review = $('<li></li>').text(review.text);
+                    $reviewList.append($review);
+                  }
+                  $reviewList.show();
+                  $(this).text('Hide Reviews');
+                }.bind(this),
+                error: function () {
+                  console.log('Error fetching reviews');
+                }
+              });
+            }
+          });
         }
       }
     });

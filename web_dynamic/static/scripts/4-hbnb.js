@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
   const amenityIds = {};
 
-  $('input[type="checkbox"]').change(function() {
+  $('input[type="checkbox"]').change(function () {
     const amenityId = $(this).attr('data-id');
     const amenityName = $(this).attr('data-name');
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
   });
 
   // Check the status of the API
-  $.get('http://0.0.0.0:5001/api/v1/status/', function(data) {
+  $.get('http://0.0.0.0:5001/api/v1/status/', function (data) {
     if (data.status === 'OK') {
       $('#api_status').addClass('available');
     } else {
@@ -25,7 +25,7 @@ $(document).ready(function() {
   });
 
   // Handle the search button click event
-  $('#search_button').click(function() {
+  $('#search_button').click(function () {
     const requestData = {
       amenities: Object.keys(amenityIds)
     };
@@ -35,7 +35,7 @@ $(document).ready(function() {
       url: 'http://0.0.0.0:5001/api/v1/places_search',
       contentType: 'application/json',
       data: JSON.stringify(requestData),
-      success: function(data) {
+      success: function (data) {
         if (data.status === 200) {
           const places = data.places;
           $('#places').empty();
@@ -47,9 +47,9 @@ $(document).ready(function() {
                   <div class="price_by_night">${place.price_by_night}</div>
                 </div>
                 <div class="information">
-                  <div class="max_guest">${place.max_guest} Guest${place.max_guest != 1 ? 's' : ''}</div>
-                  <div class="number_rooms">${place.number_rooms} Bedroom${place.number_rooms != 1 ? 's' : ''}</div>
-                  <div class="number_bathrooms">${place.number_bathrooms} Bathroom${place.number_bathrooms != 1 ? 's' : ''}</div>
+                  <div class="max_guest">${place.max_guest} Guest${place.max_guest !== 1 ? 's' : ''}</div>
+                  <div class="number_rooms">${place.number_rooms} Bedroom${place.number_rooms !== 1 ? 's' : ''}</div>
+                  <div class="number_bathrooms">${place.number_bathrooms} Bathroom${place.number_bathrooms !== 1 ? 's' : ''}</div>
                 </div>
                 <div class="description">
                   ${place.description}
